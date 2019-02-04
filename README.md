@@ -54,10 +54,15 @@ following command:
     #####*Note: It is important to activate each time you make changes to ensure you have access to libraries that will be installed for this project. If you do not do this before running code, you may see errors indicating that you do not have libraries installed that are present in the Lib directory of your virtual environment Python install
 
 5. Install Dash by running the following commands
-pip install dash==0.35.1  # The core dash backend
-pip install dash-html-components==0.13.4  # HTML components
-pip install dash-core-components==0.42.1  # Supercharged components
-pip install dash-table==3.1.11  # Interactive DataTable component (new!)
+    pip install dash==0.35.1  # The core dash backend
+    pip install dash-html-components==0.13.4  # HTML components
+    pip install dash-core-components==0.42.1  # Supercharged components
+    pip install dash-table==3.1.11  # Interactive DataTable component (new!)
+
+
+6. Install TextBlob library
+    pip install -U textblob
+    python -m textblob.download_corpora
 
 
 ### Mac
@@ -89,7 +94,20 @@ Requires:
     
 
 5. Install Dash by running the following commands
-pip install dash==0.35.1  # The core dash backend
-pip install dash-html-components==0.13.4  # HTML components
-pip install dash-core-components==0.42.1  # Supercharged components
-pip install dash-table==3.1.11  # Interactive DataTable component (new!)
+    pip install dash==0.35.1  # The core dash backend
+    pip install dash-html-components==0.13.4  # HTML components
+    pip install dash-core-components==0.42.1  # Supercharged components
+    pip install dash-table==3.1.11  # Interactive DataTable component (new!)
+
+
+6. Install TextBlob library
+    pip install -U textblob
+    python -m textblob.download_corpora
+    
+    * I had a certificate issue on Mac. I'm not sure what you'll find on Windows. I ran the following
+    commands to resolve it
+    
+    . /Applications/Python\ 3.6/Install\ Certificates.command 
+    python -m textblob.download_corpora
+
+     
