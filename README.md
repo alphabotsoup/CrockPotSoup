@@ -36,7 +36,7 @@ Requires:
 
 1. Clone CrockPotSoup repository into a directory on your computer. (Mine is in Documents/GitHub)
 
-    git clone <CrockPotSoup url>
+    git clone https://github.com/alphabotsoup/CrockPotSoup.git
 
 2. Navigate to CrockPotSoup directory you just cloned
 
@@ -51,13 +51,13 @@ following command:
      
     You will see now that your virtual environment has been activate as denoted by (venv). 
     You are now pulling from your install of Python within the venv folder.
-    *Note: It is important to activate each time you make changes to ensure you have access to libraries that will be installed for this project. If you do not do this before running code, you may see errors indicating that you do not have libraries installed that are present in the Lib directory of your virtual environment Python install
+    *Note: It is important to activate each time you make changes to ensure you have access to libraries that will be     installed for this project. If you do not do this before running code, you may see errors indicating that you do not have libraries installed that are present in the Lib directory of your virtual environment Python install
 
 5. Install Dash by running the following commands
-    pip install dash==0.35.1  # The core dash backend
-    pip install dash-html-components==0.13.4  # HTML components
-    pip install dash-core-components==0.42.1  # Supercharged components
-    pip install dash-table==3.1.11  # Interactive DataTable component (new!)
+    - pip install dash==0.35.1  # The core dash backend
+    - pip install dash-html-components==0.13.4  # HTML components
+    - pip install dash-core-components==0.42.1  # Supercharged components
+    - pip install dash-table==3.1.11  # Interactive DataTable component (new!)
 
 
 6. Install TextBlob library
@@ -73,7 +73,7 @@ Requires:
 
 1. Clone CrockPotSoup repository into a directory on your computer. (Mine is in Documents/GitHub)
 
-    git clone <CrockPotSoup url>
+    git clone https://github.com/alphabotsoup/CrockPotSoup.git
 
 2. Navigate to CrockPotSoup directory you just cloned
 
@@ -89,15 +89,15 @@ Requires:
     
     You will see now that your virtual environment has been activate as denoted by (venv). 
     You are now pulling from your install of Python within the venv folder.
-    #####*Note: It is important to activate each time you make changes to ensure you have access to libraries that will be installed for this project. If you do not do this before running code, you may see errors indicating that you do not have libraries installed that are present in the Lib directory of your virtual environment Python install
+    *Note: It is important to activate each time you make changes to ensure you have access to libraries that will be installed for this project. If you do not do this before running code, you may see errors indicating that you do not have libraries installed that are present in the Lib directory of your virtual environment Python install
 
     
 
 5. Install Dash by running the following commands
-    pip install dash==0.35.1  # The core dash backend
-    pip install dash-html-components==0.13.4  # HTML components
-    pip install dash-core-components==0.42.1  # Supercharged components
-    pip install dash-table==3.1.11  # Interactive DataTable component (new!)
+    - pip install dash==0.35.1  # The core dash backend
+    - pip install dash-html-components==0.13.4  # HTML components
+    - pip install dash-core-components==0.42.1  # Supercharged components
+    - pip install dash-table==3.1.11  # Interactive DataTable component (new!)
 
 
 6. Install TextBlob library
