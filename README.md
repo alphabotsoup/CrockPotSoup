@@ -51,7 +51,7 @@ following command:
      
     You will see now that your virtual environment has been activate as denoted by (venv). 
     You are now pulling from your install of Python within the venv folder.
-    #####*Note: It is important to activate each time you make changes to ensure you have access to libraries that will be installed for this project. If you do not do this before running code, you may see errors indicating that you do not have libraries installed that are present in the Lib directory of your virtual environment Python install
+    *Note: It is important to activate each time you make changes to ensure you have access to libraries that will be installed for this project. If you do not do this before running code, you may see errors indicating that you do not have libraries installed that are present in the Lib directory of your virtual environment Python install
 
 5. Install Dash by running the following commands
     pip install dash==0.35.1  # The core dash backend
