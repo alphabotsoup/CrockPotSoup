@@ -40,9 +40,6 @@
       <nav class="navbar headeer-top fixed-top navbar-expand-lg navbar-dark bg-dark">
         <span class="navbar-toggler-icon leftmenutrigger"></span>
         <div class="hor">
-        <img src="/images/AWNIX_Branding_Horizontal_MonArc_Small.png" width= "10%" height="10%">
-        <a download="values.yaml" id="downloadlink" style="color:white;">Download</a>
-        <input class="exportButton" type="button" id="kibExport" value="Export" onclick="kibanaExport()">
       </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
           aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,29 +57,7 @@
       </nav>
     </div>
     <br>
-    <input type="text" id="programName" value="Program Name"><br>
-    <textarea id="rawImportData" rows="10" cols="75">Paste Your Data Here</textarea>
-    <input type="button" value="Submit" onclick="importHelmChart()">
-    <h1 id="chartName"></h1><hr>
-    <!-- Values Table -->
-      <div class="box">
-        <table id="testValues">
-          <tr>
-            <th>Parameter</th>
-            <th>Description</th>
-            <th>Default</th>
-            <th>Configuration</th>
-          </tr>
-      <!-- affinity -->
-          <tr>
-            <td>affinity</td>
-            <td>node/pod affinities</td>
-            <td>None</td>
-            <td><textarea rows="1" id="affinity" class="textInput"></textarea></td>
-          </tr>
 
-        </table>
-      </div>
-    </div>
+
   </body>
 </html>
