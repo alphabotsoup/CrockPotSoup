@@ -1,9 +1,0 @@
-before_script:
-    - ./MonArc.sh install kubernetes
-    - ./MonArc.sh uninstall all
-
-build:
-  script:
-    - ./MonArc.sh install all
-    
-
