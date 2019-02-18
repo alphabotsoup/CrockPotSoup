@@ -13,14 +13,15 @@ app.layout = html.Div([
     dcc.Input(id='my-id', value='initial value', type='text'),
     html.Div(id='my-div'),
 
+    # Create a textbox
     dcc.Textarea(id='my-id2'),
     html.Div(id='my-div2'),
 
-
+    # Create a graph
     dcc.Graph(id='my-graph')
 ])
 
-
+# Populate "my-div" with tokenized values from the text box
 @app.callback(
     Output(component_id='my-div', component_property='children'),
     [Input(component_id='my-id', component_property='value')]
@@ -31,28 +32,33 @@ def update_output_div(input_value):
     return 'Tokenized words: {}'.format(words)
 
 
-
+# Populate graph "my-graph" with word frequency statistics
 @app.callback(
     Output('my-graph', 'figure'),
     [Input('my-id2', 'value')]
 )
 def update_graph(new_text):
-    new_value = TextBlob(str(new_text))
-    tokenized_word = new_value.words.lower()
+    # Turn value from TextArea into a TextBlob object
+    blob = TextBlob(str(new_text))
+    # Tokenize words and lowercase
+    tokenized_word = blob.words.lower()
 
     word_list = []
     word_frequency = []
     word_length = []
+    # Turn word list into set to remove duplicates
     word_set = set(tokenized_word)
 
-    # Turn TextBlob object into list
+    # Turn set object into list to allow for graph processing
     for obj in word_set:
         word_list.append(obj.lower())
-        word_frequency.append(new_value.word_counts[obj.lower()])
+        word_frequency.append(blob.word_counts[obj.lower()])
         word_length.append(len(obj))
 
+    # Initialize scatter plot list
     traces = []
 
+    # Add words from word list into Scatter plot dynamically
     for w in word_list:
         traces.append(go.Scatter(
             x=word_list,
