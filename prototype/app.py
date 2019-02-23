@@ -84,7 +84,5 @@ def update_graph(new_text):
     }
 
 
-
-
 if __name__ == '__main__':
     app.run_server(debug=True)
