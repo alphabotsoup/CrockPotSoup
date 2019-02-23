@@ -1,0 +1,20 @@
+#box {
+  background-color: white;
+  border: 15px solid;
+  border-radius: 5px;
+  border-color: #343a40;
+  margin-bottom: 5%;
+  float: left;
+  min-width: 100%;
+  display: none;
+}
+
+#testValues {
+  margin: 1%;
+  border: 3px solid;
+  border-color: #343a40;
+  border-radius: 10px;
+  position: relative;
+  width: 98%;
+  display: none;
+}

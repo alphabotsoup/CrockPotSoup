@@ -5,9 +5,9 @@ from dash.dependencies import Input, Output
 from textblob import TextBlob
 import plotly.graph_objs as go
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+# Init Dash
+app = dash.Dash(__name__)
 
 app.layout = html.Div([
     dcc.Input(id='my-id', value='initial value', type='text'),
