@@ -1,11 +1,17 @@
+import nltk
+from nltk import *
+from nltk.tree import *
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import csv
 from base64 import b64decode
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from textblob import TextBlob
 import plotly.graph_objs as go
+import plotly
+import math
+import plotly.plotly as py
 import pandas as pd
 
 # Init Dash
@@ -16,12 +22,10 @@ app.layout = html.Div([
     html.Div(id="header"),
     html.H1('AlphabotSoup'),
 
-    # dcc.Input(id='my-id', value='initial value', type='text'),
-    # html.Div(id='my-div'),
-
     # Create a textbox
     dcc.Textarea(id='my-id2'),
-    html.Div(id='my-div2'),
+    html.Div(id='my-div-2'),
+    html.Button(id='submit', type='submit', children='ok'),
 
     dcc.Upload(
         html.Button('Upload'),
@@ -29,25 +33,18 @@ app.layout = html.Div([
     ),
     html.Div(id='output-box'),
 
+    # Output sankey diagram
+    dcc.Graph(id='sankey-graph'),
+
     # Create word frequency bar graph
     dcc.Graph(id='word-frequency'),
 
     # Create a graph
-    dcc.Graph(id='my-graph')
+    dcc.Graph(id='my-graph'),
 
 
 
 ])
-
-# Populate "my-div" with tokenized values from the text box
-# @app.callback(
-#     Output(component_id='my-div', component_property='children'),
-#     [Input(component_id='my-id', component_property='value')]
-# )
-# def update_output_div(input_value):
-#     new_value = TextBlob(input_value)
-#     words = new_value.words
-#     return 'Tokenized words: {}'.format(words)
 
 
 # Callbacks (functionality)
@@ -70,12 +67,82 @@ def post_file(file_contents):
             rows.append(html.Tr([html.Td(col) for col in line]))
         return html.Table(rows)
 
+# Sankey graph
+@app.callback(
+    Output('sankey-graph', 'figure'), [Input('submit', 'n_clicks')],
+           [State('my-id2', 'value')]
+)
+def update_sankey(n_clicks, new_text):
+    # Turn value from TextArea into a TextBlob object
+    if new_text is not None:
+        blob = TextBlob(str(new_text).lower())
+    else:
+        blob = TextBlob('')
+
+    tagged_words = blob.tags
+
+    words_list = []
+
+    # append words
+    for i in tagged_words:
+        words_list.append(i[0])
+
+    # append tags
+    for y in tagged_words:
+        words_list.append(y[1])
+
+    # create dynamic color - random color generator for word list length
+
+    # create a dict with source (index of the word from the word list)
+    source_dict = []
+    target_dict = []
+    word_count = []
+    for i in words_list[0:len(words_list)//2]:
+        source_dict.append(words_list.index(i))
+
+    # create a dict with target (index of the pos tag from the word list
+    for i in words_list[len(words_list)//2: len(words_list)]:
+        target_dict.append(words_list.index(i))
+
+    # create a dict with value (word frequency of word at index
+    for i in words_list:
+        word_count.append(blob.word_counts[i])
+
+
+    data = dict(
+        type='sankey',
+        node=dict(
+            pad=15,
+            thickness=20,
+            line=dict(
+                color="black",
+                width=0.5
+            ),
+            label=words_list,
+            # color=["blue", "blue", "blue", "blue" "blue", "blue"]
+        ),
+        link=dict(
+            source=source_dict,
+            target= target_dict,
+            value=word_count
+        ))
+
+    layout = dict(
+        title = "Part Of Speech Mapping",
+        font = dict(
+            size = 10
+        )
+    )
+
+    fig = dict(data=[data], layout=layout)
+    return fig
+
 # Populate graph "bar-graph" with word frequency statistics
 @app.callback(
-    Output('word-frequency', 'figure'),
-    [Input('my-id2', 'value')]
+    Output('word-frequency', 'figure'), [Input('submit', 'n_clicks')],
+    [State('my-id2', 'value')]
 )
-def update_bar_graph(new_text):
+def update_bar_graph(n_clicks, new_text):
     # Turn value from TextArea into a TextBlob object
     if new_text is not None:
         blob = TextBlob(str(new_text).lower())
@@ -111,11 +178,8 @@ def update_bar_graph(new_text):
 
     word_tags_set = set(word_tags)
 
-
     # Initialize scatter plot list
     traces = []
-
-    # Add all pos tags to
 
     # Add words from word list into Scatter plot dynamically
     for w in word_tags_set:
@@ -137,10 +201,12 @@ def update_bar_graph(new_text):
 
 # Populate graph "my-graph" with word frequency statistics
 @app.callback(
-    Output('my-graph', 'figure'),
-    [Input('my-id2', 'value')]
+    # Output('my-graph', 'figure'),
+    # [Input('my-id2', 'value')]
+    Output('my-graph', 'figure'), [Input('submit', 'n_clicks')],
+    [State('my-id2', 'value')]
 )
-def update_graph(new_text):
+def update_graph(n_clicks, new_text):
     # Turn value from TextArea into a TextBlob object
     if new_text is not None:
         blob = TextBlob(str(new_text).lower())
@@ -181,10 +247,14 @@ def update_graph(new_text):
 
     # Initialize scatter plot list
     traces = []
-    counter = 0
+    traces2 = []
+    word_tag_set = set(word_tags)
+    for tag in word_tag_set:
+        traces2.append(tag)
 
     # Add words from word list into Scatter plot dynamically
-    for w in word_list:
+    # for w in word_tag_set:
+    for t in traces2:
         traces.append(go.Scatter(
             x=word_list,
             y=word_frequency,
@@ -195,9 +265,8 @@ def update_graph(new_text):
                 'size': 15,
                 'line': {'width': 1, 'color': 'white'}
             },
-            name=word_tags2[counter][1]
+            name=t
         ))
-        counter = counter + 1
 
     return {
         'data': traces,
