@@ -6,10 +6,11 @@ from base64 import b64decode
 from dash.dependencies import Input, Output
 from textblob import TextBlob
 import plotly.graph_objs as go
-
+import pandas as pd
 
 # Init Dash
 app = dash.Dash(__name__)
+
 
 app.layout = html.Div([
     html.Div(id="header"),
@@ -28,8 +29,13 @@ app.layout = html.Div([
     ),
     html.Div(id='output-box'),
 
+    # Create word frequency bar graph
+    dcc.Graph(id='word-frequency'),
+
     # Create a graph
     dcc.Graph(id='my-graph')
+
+
 
 ])
 
@@ -64,6 +70,71 @@ def post_file(file_contents):
             rows.append(html.Tr([html.Td(col) for col in line]))
         return html.Table(rows)
 
+# Populate graph "bar-graph" with word frequency statistics
+@app.callback(
+    Output('word-frequency', 'figure'),
+    [Input('my-id2', 'value')]
+)
+def update_bar_graph(new_text):
+    # Turn value from TextArea into a TextBlob object
+    if new_text is not None:
+        blob = TextBlob(str(new_text).lower())
+    else:
+        blob = TextBlob('')
+    # Tokenize words and lowercase
+    tokenized_word = blob.words.lower() # remove this lower
+
+    word_list = []
+    word_frequency = []
+    word_length = []
+    word_tags = []
+    word_dict = {}
+
+    # Turn word list into set to remove duplicates
+    word_set = set(tokenized_word)
+
+    # Turn set object into list to allow for graph processing
+    for obj in word_set:
+        single_word_blob = TextBlob(obj)
+        pos_tag = single_word_blob.tags
+
+        word_list.append(obj.lower())
+        word_frequency.append(blob.word_counts[obj.lower()])
+        word_length.append(len(obj))
+        word_tags.append(pos_tag[0][1])
+        word_dict = {
+            'Words': word_list,
+            'Frequency': word_frequency,
+            'Length': word_length,
+            'Tags': word_tags
+        }
+
+    word_tags_set = set(word_tags)
+
+
+    # Initialize scatter plot list
+    traces = []
+
+    # Add all pos tags to
+
+    # Add words from word list into Scatter plot dynamically
+    for w in word_tags_set:
+        traces = (go.Bar(
+            x=word_dict['Words'],
+            y=word_dict['Frequency'],
+            name=w
+        ))
+
+    return {
+        'data': [traces],
+        'layout': go.Layout(
+            title='Word Frequency',
+            xaxis={'type': 'category', 'title': 'Unique Words'},
+            yaxis={'type': 'linear', 'title': 'Word Frequency', 'range': [0, len(word_list) + 10]},
+            barmode='group'
+        )
+    }
+
 # Populate graph "my-graph" with word frequency statistics
 @app.callback(
     Output('my-graph', 'figure'),
@@ -72,60 +143,68 @@ def post_file(file_contents):
 def update_graph(new_text):
     # Turn value from TextArea into a TextBlob object
     if new_text is not None:
-        blob = TextBlob(str(new_text))
+        blob = TextBlob(str(new_text).lower())
     else:
         blob = TextBlob('')
     # Tokenize words and lowercase
-    tokenized_word = blob.words.lower()
+    tokenized_word = blob.words.lower() # remove this lower
 
     word_list = []
     word_frequency = []
     word_length = []
-    word_dict_list = []
+    word_tags = []
+    word_tags2 = blob.tags
+    word_dict = {}
+
 
     # Turn word list into set to remove duplicates
     word_set = set(tokenized_word)
 
     # Turn set object into list to allow for graph processing
     for obj in word_set:
-        word_dict = {
-            'word': obj.lower(),
-            'frequency': blob.word_counts[obj.lower()],
-            'length': str(len(obj))
-        }
+        single_word_blob = TextBlob(obj)
+        pos_tag = single_word_blob.tags
 
-        word_dict_list.append(word_dict)
+        word_dict = {
+            str(obj): {
+                "frequency": blob.word_counts[obj.lower()],
+                "length": len(obj),
+                "pos": pos_tag[0][1]
+            }
+        }
 
         word_list.append(obj.lower())
         word_frequency.append(blob.word_counts[obj.lower()])
         word_length.append(len(obj))
+        word_tags.append(pos_tag[0][1])
+
 
     # Initialize scatter plot list
     traces = []
+    counter = 0
 
     # Add words from word list into Scatter plot dynamically
     for w in word_list:
         traces.append(go.Scatter(
             x=word_list,
             y=word_frequency,
-            text=word_length,
+            text=word_tags,
             mode='markers',
             opacity=0.7,
             marker={
                 'size': 15,
-                'line': {'width': 1, 'color': 'white'},
-                'color': 'red'
+                'line': {'width': 1, 'color': 'white'}
             },
-            name=w
-
+            name=word_tags2[counter][1]
         ))
+        counter = counter + 1
 
     return {
         'data': traces,
         'layout': go.Layout(
             xaxis={'type': 'category', 'title':'Unique Words'},
             yaxis={'type': 'linear', 'title': 'Word Frequency', 'range': [0, len(word_list) + 10]},
-            # legend={'x': -1, 'y': 0},
+            legend={'x': -1, 'y': 0},
             hovermode='closest'
         )
     }
