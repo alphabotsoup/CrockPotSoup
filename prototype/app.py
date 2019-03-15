@@ -91,8 +91,6 @@ def update_sankey(n_clicks, new_text):
     for y in tagged_words:
         words_list.append(y[1])
 
-    # create dynamic color - random color generator for word list length
-
     # create a dict with source (index of the word from the word list)
     source_dict = []
     target_dict = []
@@ -106,7 +104,7 @@ def update_sankey(n_clicks, new_text):
 
     # create a dict with value (word frequency of word at index
     for i in words_list:
-        word_count.append(blob.word_counts[i])
+        word_count.append(1)
 
 
     data = dict(
