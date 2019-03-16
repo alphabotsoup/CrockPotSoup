@@ -1,15 +1,14 @@
 import fileinput
+import nltk.chunk       # Chunking tools to translate groups of verbs/nouns into Subject-Verb-Object
+import nltk.chunk.util
+import nltk.chunk.regexp
 from nltk.stem import WordNetLemmatizer
-import nltk.tag
-import nltk.tokenize
+import nltk.tag         # Part-of-Speech Tagging (to determine verbs, nouns, etc)
+import nltk.tokenize    # Breaking down raw input into words / symbols
 
 
 ### Init
 wordnet = WordNetLemmatizer()
-
-# Check adjacent tokens for function arguments (verb objects)
-def check_args():
-    pass
 
 # Declare contextual variables (inspired by Perl speclal/default variables)
 # Nouns are basically copied here when referenced so that pronouns / implicit references can access them
@@ -31,12 +30,15 @@ for paragraph in fileinput.input():
     sentences = [[word for word in nltk.word_tokenize(sentence)] for sentence in nltk.sent_tokenize(paragraph)]
     for sentence in [nltk.tag.pos_tag(sentence) for sentence in sentences]:
         print(sentence)
-        # Hunt down each action verb in the sentence (a sentence with no verbs is meaningless, right?)
-        for index in range(len(sentence)):
-            token, tag = sentence[index]
-            if tag == 'VB' or tag == 'VBD' or tag == 'VBG' or tag == 'VBN': # Verb invocation
-                verb = wordnet.lemmatize(token, 'v')   # Get base form of verb
-                # Get subject / objects (arguments), if any
+        ### Get Subject-Verb-Object chunks
+        # Define regex rules for identifying SVO
+        chunk_rules = [
+            "<VB.?><CD>(?!<NN.?>)"  # Example: Get verbs followed by a number that *isn't* counting objects (e.g. "add seven")
+        ]
+        # Get chunked result
+        chunked_sentence = RegexpChunkParser([ChunkRule(cr) for cr in chunk_rules], chunk_label='SVO').parse(sentence)
+        # Step through each clause and map to function calls
+        pass
 
 
 VERBS = {
