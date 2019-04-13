@@ -252,7 +252,7 @@ def update_pie(n_clicks, word_dict):
         values=word_dict['tag_frequency'],
     )
 
-    return {"data": [trace], "layout": layout}
+    return {"data": [trace], "layout": layout, "height": 500}
 
 
 # Sankey graph
