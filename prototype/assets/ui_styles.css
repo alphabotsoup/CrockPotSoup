@@ -412,8 +412,3 @@ there.
 
 /* Larger than Desktop HD */
 @media (min-width: 1200px) {}
-
-/* Custom
-___________________________________*/
-
-#header {background: "black", color: "white", text-align: "left"}
