@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output, State
 from textblob import TextBlob
 import plotly.graph_objs as go
 import math
+import json
 
 
 # Init Dash
@@ -86,7 +87,8 @@ app.layout = html.Div([
     ], className="row"),
 
     # create hidden div for data processing
-    dcc.Textarea(id='intermediate-value', hidden=True)
+    # dcc.Textarea(id='intermediate-value', hidden='true')
+    html.Div(id='intermediate-value', hidden=True)
 
 ])
 
@@ -106,7 +108,7 @@ def jsonify_data(n_clicks, new_text):
     word_list = []
     word_frequency = []
     word_length = []
-    word_tags = []
+    unique_tags = []
 
     words_list = []
     tags_list = []
@@ -146,7 +148,7 @@ def jsonify_data(n_clicks, new_text):
         word_list.append(obj.lower())
         word_frequency.append(blob.word_counts[obj.lower()])
         word_length.append(len(obj))
-        word_tags.append(pos_tag[0][1])
+        unique_tags.append(pos_tag[0][1])
 
     word_length.sort()
 
@@ -169,14 +171,13 @@ def jsonify_data(n_clicks, new_text):
     word_dict = {'word_list': word_list,
                  'word_frequency': word_frequency,
                  'word_length': word_length,
-                 'word_tags': word_tags,
+                 'unique_tags': unique_tags,
                  'tags_list': tags_list,
                  'tag_frequency': tag_frequency,
                  'words_list': words_list,
                  'word_count': word_count,
                  'source_dict': source_dict,
                  'target_dict': target_dict,
-                 'pie_chart': pie_chart_words_list
                  }
 
     return word_dict
@@ -213,9 +214,7 @@ def update_length(n_clicks, word_dict):
         )
     }
 
-# Callbacks (functionality)
 @app.callback(
-    # Output('output-box', 'children'),
     Output('my-id2', 'value'),
     [Input('input-box', 'contents')]
 )
@@ -248,11 +247,11 @@ def update_pie(n_clicks, word_dict):
     )
 
     trace = go.Pie(
-        labels=word_dict['pie_chart'],
+        labels=word_dict['tags_list'],
         values=word_dict['tag_frequency'],
     )
 
-    return {"data": [trace], "layout": layout, "height": 500}
+    return {"data": [trace], "layout": layout}
 
 
 # Sankey graph
@@ -296,7 +295,7 @@ def update_sankey(n_clicks, word_dict):
     [State('intermediate-value', 'value')]
 )
 def update_bar_graph(n_clicks, word_dict):
-    word_tags_set = set(word_dict['word_tags'])
+    word_tags_set = set(word_dict['unique_tags'])
 
     # Initialize scatter plot list
     traces = []
