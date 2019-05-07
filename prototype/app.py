@@ -7,7 +7,6 @@ from dash.dependencies import Input, Output, State
 from textblob import TextBlob
 import plotly.graph_objs as go
 import math
-import json
 
 
 # Init Dash
@@ -25,9 +24,6 @@ app.layout = html.Div([
               html.Div([
                   html.H1('AlphabotSoup'),
               ], className="col-md-6"),
-              # html.Div([
-              #     html.P('Explore natural language processing.')
-              # ], className="col-md-6"),
           ], className="row")
       ], className="container")
      ], style={'background': 'black', 'color': 'white', 'height': '100px', 'padding-top': '15px'})
@@ -59,19 +55,6 @@ app.layout = html.Div([
         ], className="col-md-6"),
 
     ], className="row"),
-
-    # # create row
-    # html.Div([
-    #     # create sankey div
-    #     html.Div([
-    #         # Output sankey diagram
-    #         dcc.Graph(id='sankey-graph')
-    #     ], className="col-md-12"),
-    #     html.Div([
-    #         # Create word frequency bar graph
-    #         dcc.Graph(id='word-frequency'),
-    #     ], className="col-md-12")
-    # ], className="row", style={'padding-top': '15px'}),
 
     # create row
     html.Div([
@@ -245,7 +228,6 @@ def post_file(file_contents):
             rows.append(html.Tr([html.Td(col) for col in line]))
 
         return file_contents
-        # return html.Table(rows)
 
 
 # Pie chart
