@@ -80,17 +80,26 @@ VERBS = {
     "add": [add,inc],
     "increment": [inc],
     "increase": [add,inc],
+    "+": [add,inc],
+    "++": [inc],
 
     "sub": [sub,dec],
     "subtract": [sub,dec],
     "decrement": [dec],
     "decrease": [sub,dec],
+    "-": [sub,dec],
+    "--": [dec],
 
     "multiply": [mul],
+    "*": [mul],
+    "x": [mul],
 
     "divide": [div,mod],
+    "/": [div],
+    "%": [mod],
 
     "is": [exist],
+    "=": [exist],
     "has": [has,exist]
 }
 
