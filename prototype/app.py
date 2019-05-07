@@ -59,10 +59,25 @@ app.layout = html.Div([
 
 
     # create row
-    # dcc.Loading(id="loading-1", children=[html.Div(id="loading-output-1")], type="default"),
-
     dcc.Loading(id="loading",
         children=[html.Div([
+            html.Div([
+                # create total word count tile
+                html.Div([
+
+                ],id='word-count', className="col-md-4"),
+
+                # create total unique word count tile
+                html.Div([
+
+                ], id='unique-words', className="col-md-4"),
+
+                # create word complexity score
+                html.Div([
+
+                ], id='word-complexity', className="col-md-4")
+            ], className="row"),
+
             # create pie div
             html.Div([
                 html.Div([
@@ -93,12 +108,6 @@ app.layout = html.Div([
         ])
 ])
 
-# @app.callback(Output("loading-output-1", "value"), [Input('intermediate-value', 'value')],
-#     [State('intermediate-value', 'value')]
-# )
-# def input_triggers_spinner(children, value):
-#     time.sleep(1)
-#     return value
 
 @app.callback(Output('intermediate-value', 'value'),  [Input('submit', 'n_clicks')],
               [State('text', 'value')]
@@ -189,6 +198,47 @@ def jsonify_data(n_clicks, new_text):
                  }
 
     return word_dict
+
+@app.callback(
+    Output('word-count', 'children'), [Input('intermediate-value', 'value')],
+    [State('intermediate-value', 'value')]
+)
+def update_word_count(value, word_dict):
+    total = 0
+    for w in word_dict['word_frequency']:
+        total = total + w
+    return html.Div([html.H1(total),
+                     html.H3("Word Total")
+                     ], className="tile")
+
+
+@app.callback(
+    Output('unique-words', 'children'), [Input('intermediate-value', 'value')],
+    [State('intermediate-value', 'value')]
+)
+def update_unique_count(value, word_dict):
+    return html.Div([html.H1(len(word_dict['word_frequency'])),
+                     html.H3("Unique Word Total")
+                     ], className="tile")
+
+
+@app.callback(
+    Output('word-complexity', 'children'), [Input('intermediate-value', 'value')],
+    [State('intermediate-value', 'value')]
+)
+def update_word_count(value, word_dict):
+    complexity=0
+    total = 0
+    for w in word_dict['word_frequency']:
+        total = total + w
+
+    word_dict['word_length'].sort()
+    average = round((word_dict['word_length'][0] + word_dict['word_length'][-1])/2,2)
+
+    return html.Div([html.H1(average),
+                     html.H3("Average Word Length")
+                     ], className="tile")
+
 
 @app.callback(
     Output('length-graph', 'figure'), [Input('intermediate-value', 'value')],
