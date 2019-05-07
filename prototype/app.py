@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output, State
 from textblob import TextBlob
 import plotly.graph_objs as go
 import math
+import time
 
 
 # Init Dash
@@ -56,37 +57,48 @@ app.layout = html.Div([
 
     ], className="row"),
 
+
     # create row
+    # dcc.Loading(id="loading-1", children=[html.Div(id="loading-output-1")], type="default"),
+
     dcc.Loading(id="loading",
         children=[html.Div([
             # create pie div
             html.Div([
-                # Output pie chart
-                dcc.Graph(id='pie-chart')
-            ], className="col-md-6"),
-            html.Div([
-                # Create definition sankey here
-                dcc.Graph(id='length-graph'),
-            ], className="col-md-6")
-        ], className="row"),
+                html.Div([
+                    # Output pie chart
+                    dcc.Graph(id='pie-chart')
+                ], className="col-md-6"),
+                html.Div([
+                    # Create definition sankey here
+                    dcc.Graph(id='length-graph'),
+                ], className="col-md-6")
+            ], className="row"),
 
-        # create row
-        html.Div([
+            # create row
             html.Div([
-                # Create word frequency bar graph
-                dcc.Graph(id='word-frequency'),
-            ], className="col-md-12"),
-            # create sankey div
-            html.Div([
-                # Output sankey diagram
-                dcc.Graph(id='sankey-graph')
-            ], className="col-md-12")
-        ], className="row", style={'padding-top': '15px'}),
+                html.Div([
+                    # Create word frequency bar graph
+                    dcc.Graph(id='word-frequency'),
+                ], className="col-md-12"),
+                # create sankey div
+                html.Div([
+                    # Output sankey diagram
+                    dcc.Graph(id='sankey-graph')
+                ], className="col-md-12")
+            ], className="row", style={'padding-top': '15px'}),
 
-        # create hidden div for data processing
-        html.Div(id='intermediate-value', hidden=True)
-    ])
+            # create hidden div for data processing
+            html.Div(id='intermediate-value', hidden=True, children=dcc.Input(id="hidden-input"))])
+        ])
 ])
+
+# @app.callback(Output("loading-output-1", "value"), [Input('intermediate-value', 'value')],
+#     [State('intermediate-value', 'value')]
+# )
+# def input_triggers_spinner(children, value):
+#     time.sleep(1)
+#     return value
 
 @app.callback(Output('intermediate-value', 'value'),  [Input('submit', 'n_clicks')],
               [State('text', 'value')]
