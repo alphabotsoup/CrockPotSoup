@@ -57,25 +57,26 @@ app.layout = html.Div([
 
     ], className="row"),
 
-    html.Div([
-        # create total word count tile
-        html.Div([
+    dcc.Loading(id="loading-top",
+        children=[html.Div([
+            # create total word count tile
+            html.Div([
 
-        ],id='word-count', className="col-md-4"),
+            ],id='word-count', className="col-md-4"),
 
-        # create total unique word count tile
-        html.Div([
+            # create total unique word count tile
+            html.Div([
 
-        ], id='unique-words', className="col-md-4"),
+            ], id='unique-words', className="col-md-4"),
 
-        # create word complexity score
-        html.Div([
+            # create word complexity score
+            html.Div([
 
-        ], id='word-complexity', className="col-md-4")
-    ], className="row"),
+            ], id='word-complexity', className="col-md-4")
+        ], className="row")]),
 
     # create row
-    dcc.Loading(id="loading",
+    dcc.Loading(id="loading-bottom",
         children=[html.Div([
             # html.Div([
             #     # create total word count tile
