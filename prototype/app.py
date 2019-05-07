@@ -57,42 +57,27 @@ app.layout = html.Div([
 
     ], className="row"),
 
-    html.Div([
-        # create total word count tile
-        html.Div([
+    dcc.Loading(id="loading-top",
+        children=[html.Div([
+            # create total word count tile
+            html.Div([
 
-        ],id='word-count', className="col-md-4"),
+            ],id='word-count', className="col-md-4"),
 
-        # create total unique word count tile
-        html.Div([
+            # create total unique word count tile
+            html.Div([
 
-        ], id='unique-words', className="col-md-4"),
+            ], id='unique-words', className="col-md-4"),
 
-        # create word complexity score
-        html.Div([
+            # create word complexity score
+            html.Div([
 
-        ], id='word-complexity', className="col-md-4")
-    ], className="row"),
+            ], id='word-complexity', className="col-md-4")
+        ], className="row")]),
 
     # create row
-    dcc.Loading(id="loading",
+    dcc.Loading(id="loading-bottom",
         children=[html.Div([
-            # html.Div([
-            #     # create total word count tile
-            #     html.Div([
-            #
-            #     ],id='word-count', className="col-md-4"),
-            #
-            #     # create total unique word count tile
-            #     html.Div([
-            #
-            #     ], id='unique-words', className="col-md-4"),
-            #
-            #     # create word complexity score
-            #     html.Div([
-            #
-            #     ], id='word-complexity', className="col-md-4")
-            # ], className="row"),
 
             # create pie div
             html.Div([
@@ -129,6 +114,15 @@ app.layout = html.Div([
               [State('text', 'value')]
 )
 def jsonify_data(n_clicks, new_text):
+    # Take text and remove unwanted values
+    new_text = str(new_text)
+    new_text = new_text.replace(",", "")
+    new_text = new_text.replace("'", "")
+    new_text = new_text.replace("...", "")
+    new_text = new_text.replace("-", "")
+
+
+
     # Turn value from TextArea into a TextBlob object
     if new_text is not None:
         blob = TextBlob(str(new_text).lower())
@@ -249,7 +243,10 @@ def update_word_count(value, word_dict):
         total = total + w
 
     word_dict['word_length'].sort()
-    average = round((word_dict['word_length'][0] + word_dict['word_length'][-1])/2,2)
+    if len(word_dict['word_length']) > 0:
+        average = round((word_dict['word_length'][0] + word_dict['word_length'][-1])/2,2)
+    else:
+        average = 0
 
     return html.Div([html.H1(average),
                      html.H3("Average Word Length")
