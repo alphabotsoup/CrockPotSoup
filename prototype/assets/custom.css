@@ -1,6 +1,22 @@
+html, body{
+    margin:0;
+}
+
 .header-dark{
-    background: "black",
-    color: "white",
-    text-align: "left",
-    height: 200px
+    background-color: black;
+    color: white;
+    height: 100px;
+    padding-top: 15px;
+    padding-right: 1350px;
+    margin: 0;
+}
+
+*[data-dash-is-loading="true"]{
+    visibility: hidden;
+}
+
+*[data-dash-is-loading="true"]::before{
+    content: "Loading...";
+    display: inline-block;
+    visibility: visible;
 }

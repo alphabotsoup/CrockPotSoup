@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output, State
 from textblob import TextBlob
 import plotly.graph_objs as go
 import math
+import time
 
 
 # Init Dash
@@ -23,10 +24,10 @@ app.layout = html.Div([
           html.Div([
               html.Div([
                   html.H1('AlphabotSoup'),
-              ], className="col-md-6"),
+              ], className="col-md-6", style={"margin-left": "0px","text-align": "left", "padding-right": "15px"}),
           ], className="row")
       ], className="container")
-     ], style={'background': 'black', 'color': 'white', 'height': '100px', 'padding-top': '15px'})
+     ], className="header-dark")
     ),
 
     # create input row div
@@ -34,7 +35,7 @@ app.layout = html.Div([
         html.Div([
             # Create a textbox
             html.H4('Enter your text here'),
-            dcc.Textarea(id='my-id2', rows='12', cols='50', value='This is a test. This is only a test.'),
+            dcc.Textarea(id='text', rows='12', cols='50', value='This is a test. This is only a test.'),
                 html.Div([
                 html.Button(id='submit', type='submit', children='ok'),
 
@@ -56,39 +57,51 @@ app.layout = html.Div([
 
     ], className="row"),
 
-    # create row
-    html.Div([
-        # create pie div
-        html.Div([
-            # Output pie chart
-            dcc.Graph(id='pie-chart')
-        ], className="col-md-6"),
-        html.Div([
-            # Create definition sankey here
-            dcc.Graph(id='length-graph'),
-        ], className="col-md-6")
-    ], className="row"),
 
     # create row
-    html.Div([
-        # create sankey div
-        html.Div([
-            # Output sankey diagram
-            dcc.Graph(id='sankey-graph')
-        ], className="col-md-12"),
-        html.Div([
-            # Create word frequency bar graph
-            dcc.Graph(id='word-frequency'),
-        ], className="col-md-12")
-    ], className="row", style={'padding-top': '15px'}),
+    # dcc.Loading(id="loading-1", children=[html.Div(id="loading-output-1")], type="default"),
 
-    # create hidden div for data processing
-    html.Div(id='intermediate-value', hidden=True)
+    dcc.Loading(id="loading",
+        children=[html.Div([
+            # create pie div
+            html.Div([
+                html.Div([
+                    # Output pie chart
+                    dcc.Graph(id='pie-chart')
+                ], className="col-md-6"),
+                html.Div([
+                    # Create definition sankey here
+                    dcc.Graph(id='length-graph'),
+                ], className="col-md-6")
+            ], className="row"),
 
+            # create row
+            html.Div([
+                html.Div([
+                    # Create word frequency bar graph
+                    dcc.Graph(id='word-frequency'),
+                ], className="col-md-12"),
+                # create sankey div
+                html.Div([
+                    # Output sankey diagram
+                    dcc.Graph(id='sankey-graph')
+                ], className="col-md-12")
+            ], className="row", style={'padding-top': '15px'}),
+
+            # create hidden div for data processing
+            html.Div(id='intermediate-value', hidden=True, children=dcc.Input(id="hidden-input"))])
+        ])
 ])
 
-@app.callback(Output('intermediate-value', 'value'), [Input('submit', 'n_clicks')],
-              [State('my-id2', 'value')]
+# @app.callback(Output("loading-output-1", "value"), [Input('intermediate-value', 'value')],
+#     [State('intermediate-value', 'value')]
+# )
+# def input_triggers_spinner(children, value):
+#     time.sleep(1)
+#     return value
+
+@app.callback(Output('intermediate-value', 'value'),  [Input('submit', 'n_clicks')],
+              [State('text', 'value')]
 )
 def jsonify_data(n_clicks, new_text):
     # Turn value from TextArea into a TextBlob object
@@ -181,7 +194,7 @@ def jsonify_data(n_clicks, new_text):
     Output('length-graph', 'figure'), [Input('intermediate-value', 'value')],
     [State('intermediate-value', 'value')]
 )
-def update_length(n_clicks, word_dict):
+def update_length(value, word_dict):
     # Initialize scatter plot list
     traces = []
 
@@ -210,7 +223,7 @@ def update_length(n_clicks, word_dict):
     }
 
 @app.callback(
-    Output('my-id2', 'value'),
+    Output('text', 'value'),
     [Input('input-box', 'contents')]
 )
 def post_file(file_contents):
