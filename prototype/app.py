@@ -60,18 +60,18 @@ app.layout = html.Div([
 
     ], className="row"),
 
-    # create row
-    html.Div([
-        # create sankey div
-        html.Div([
-            # Output sankey diagram
-            dcc.Graph(id='sankey-graph')
-        ], className="col-md-12"),
-        html.Div([
-            # Create word frequency bar graph
-            dcc.Graph(id='word-frequency'),
-        ], className="col-md-12")
-    ], className="row", style={'padding-top': '15px'}),
+    # # create row
+    # html.Div([
+    #     # create sankey div
+    #     html.Div([
+    #         # Output sankey diagram
+    #         dcc.Graph(id='sankey-graph')
+    #     ], className="col-md-12"),
+    #     html.Div([
+    #         # Create word frequency bar graph
+    #         dcc.Graph(id='word-frequency'),
+    #     ], className="col-md-12")
+    # ], className="row", style={'padding-top': '15px'}),
 
     # create row
     html.Div([
@@ -86,8 +86,20 @@ app.layout = html.Div([
         ], className="col-md-6")
     ], className="row"),
 
+    # create row
+    html.Div([
+        # create sankey div
+        html.Div([
+            # Output sankey diagram
+            dcc.Graph(id='sankey-graph')
+        ], className="col-md-12"),
+        html.Div([
+            # Create word frequency bar graph
+            dcc.Graph(id='word-frequency'),
+        ], className="col-md-12")
+    ], className="row", style={'padding-top': '15px'}),
+
     # create hidden div for data processing
-    # dcc.Textarea(id='intermediate-value', hidden='true')
     html.Div(id='intermediate-value', hidden=True)
 
 ])
