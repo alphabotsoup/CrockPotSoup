@@ -49,7 +49,7 @@ app.layout = html.Div([
         html.Div([
             html.Div([
                 html.H3('Introduction:'),
-                html.P('AlphabotSoup is an educational exploration in the power'
+                html.P('AlphabotSoup is an educational exploration in the power '
                        'of natural language processing. To get started, upload a '
                        'text file or type in the textbox to see the magic happen.')
             ], id="Introduction"),
@@ -57,26 +57,42 @@ app.layout = html.Div([
 
     ], className="row"),
 
+    html.Div([
+        # create total word count tile
+        html.Div([
+
+        ],id='word-count', className="col-md-4"),
+
+        # create total unique word count tile
+        html.Div([
+
+        ], id='unique-words', className="col-md-4"),
+
+        # create word complexity score
+        html.Div([
+
+        ], id='word-complexity', className="col-md-4")
+    ], className="row"),
 
     # create row
     dcc.Loading(id="loading",
         children=[html.Div([
-            html.Div([
-                # create total word count tile
-                html.Div([
-
-                ],id='word-count', className="col-md-4"),
-
-                # create total unique word count tile
-                html.Div([
-
-                ], id='unique-words', className="col-md-4"),
-
-                # create word complexity score
-                html.Div([
-
-                ], id='word-complexity', className="col-md-4")
-            ], className="row"),
+            # html.Div([
+            #     # create total word count tile
+            #     html.Div([
+            #
+            #     ],id='word-count', className="col-md-4"),
+            #
+            #     # create total unique word count tile
+            #     html.Div([
+            #
+            #     ], id='unique-words', className="col-md-4"),
+            #
+            #     # create word complexity score
+            #     html.Div([
+            #
+            #     ], id='word-complexity', className="col-md-4")
+            # ], className="row"),
 
             # create pie div
             html.Div([
