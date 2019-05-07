@@ -3,12 +3,11 @@ import dash_core_components as dcc
 import dash_html_components as html
 import csv
 from base64 import b64decode
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 from textblob import TextBlob
 import plotly.graph_objs as go
 import math
 import json
-
 
 # Init Dash
 app = dash.Dash('AlphabotSoup')
@@ -17,48 +16,21 @@ app.config['suppress_callback_exceptions']=True
 # Bootstrap css
 
 app.layout = html.Div([
-    # create header row div
-    html.Header(
-     html.Div([
-      html.Div([
-          html.Div([
-              html.Div([
-                  html.H1('AlphabotSoup'),
-              ], className="col-md-6"),
-              # html.Div([
-              #     html.P('Explore natural language processing.')
-              # ], className="col-md-6"),
-          ], className="row")
-      ], className="container")
-     ], style={'background': 'black', 'color': 'white', 'height': '100px', 'padding-top': '15px'})
+    html.Div(id="header"),
+    html.H1('AlphabotSoup'),
+
+    # dcc.Input(id='my-id', value='initial value', type='text'),
+    # html.Div(id='my-div'),
+
+    # Create a textbox
+    dcc.Textarea(id='my-id2'),
+    html.Div(id='my-div2'),
+
+    dcc.Upload(
+        html.Button('Upload'),
+        id='input-box'
     ),
-
-    # create input row div
-    html.Div([
-        html.Div([
-            # Create a textbox
-            html.H4('Enter your text here'),
-            dcc.Textarea(id='my-id2', rows='12', cols='50', value='This is a test. This is only a test.'),
-                html.Div([
-                html.Button(id='submit', type='submit', children='ok'),
-
-                dcc.Upload(
-                html.Button('Upload'),
-                id='input-box'),
-                html.Div(id='output-box')
-            ]),
-        ], className="col-md-6"),
-
-        html.Div([
-            html.Div([
-                html.H3('Introduction:'),
-                html.P('AlphabotSoup is an educational exploration in the power'
-                       'of natural language processing. To get started, upload a '
-                       'text file or type in the textbox to see the magic happen.')
-            ], id="Introduction"),
-        ], className="col-md-6"),
-
-    ], className="row"),
+    html.Div(id='output-box'),
 
     # # create row
     # html.Div([
@@ -317,19 +289,21 @@ def update_bar_graph(n_clicks, word_dict):
         traces = (go.Bar(
             x=word_dict['word_list'],
             y=word_dict['word_frequency'],
+
             name=w
+
         ))
 
     return {
-        'data': [traces],
+        'data': traces,
         'layout': go.Layout(
             title='Word Frequency',
             xaxis={'type': 'category', 'title': 'Unique Words'},
             yaxis={'type': 'linear', 'title': 'Word Frequency', 'range': [0, int(math.ceil(max(word_dict['word_frequency'])/10.0)) * 10]},
             barmode='group'
+
         )
     }
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)
