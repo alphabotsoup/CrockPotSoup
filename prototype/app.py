@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output, State
 from textblob import TextBlob
 import plotly.graph_objs as go
 import math
-import time
+import statistics
 
 
 # Init Dash
@@ -57,7 +57,7 @@ app.layout = html.Div([
 
     ], className="row"),
 
-    dcc.Loading(id="loading-top",
+    dcc.Loading(id="loading-top-1",
         children=[html.Div([
             # create total word count tile
             html.Div([
@@ -73,40 +73,38 @@ app.layout = html.Div([
             html.Div([
 
             ], id='word-complexity', className="col-md-4")
-        ], className="row")]),
+        ], className="row")
+    ]),
 
     # create row
-    dcc.Loading(id="loading-bottom",
-        children=[html.Div([
+    dcc.Loading(id="loading-bottom-1",
+                children=[html.Div([
 
-            # create pie div
-            html.Div([
-                html.Div([
-                    # Output pie chart
-                    dcc.Graph(id='pie-chart')
-                ], className="col-md-6"),
-                html.Div([
-                    # Create definition sankey here
-                    dcc.Graph(id='length-graph'),
-                ], className="col-md-6")
-            ], className="row"),
+                    # create pie div
+                    html.Div([
+                        html.Div([
+                            # Output pie chart
+                            dcc.Graph(id='pie-chart')
+                        ], className="col-md-12"),
+                    ], className="row"),
 
-            # create row
-            html.Div([
-                html.Div([
-                    # Create word frequency bar graph
-                    dcc.Graph(id='word-frequency'),
-                ], className="col-md-12"),
-                # create sankey div
-                html.Div([
-                    # Output sankey diagram
-                    dcc.Graph(id='sankey-graph')
-                ], className="col-md-12")
-            ], className="row", style={'padding-top': '15px'}),
+                    # create row
+                    html.Div([
+                        html.Div([
+                            # Create word frequency bar graph
+                            dcc.Graph(id='word-frequency'),
+                        ], className="col-md-12"),
+                        # create sankey div
+                        html.Div([
+                            # Output sankey diagram
+                            dcc.Graph(id='sankey-graph')
+                        ], className="col-md-12")
+                    ], className="row", style={'padding-top': '15px'}),
 
-            # create hidden div for data processing
-            html.Div(id='intermediate-value', hidden=True, children=dcc.Input(id="hidden-input"))])
-        ])
+                    # create hidden div for data processing
+                    html.Div(id='intermediate-value', hidden=True, children=dcc.Input(id="hidden-input"))])
+    ]),
+
 ])
 
 
@@ -120,7 +118,7 @@ def jsonify_data(n_clicks, new_text):
     new_text = new_text.replace("'", "")
     new_text = new_text.replace("...", "")
     new_text = new_text.replace("-", "")
-
+    new_text = new_text.replace("`", "")
 
 
     # Turn value from TextArea into a TextBlob object
@@ -242,9 +240,10 @@ def update_word_count(value, word_dict):
     for w in word_dict['word_frequency']:
         total = total + w
 
-    word_dict['word_length'].sort()
+    # word_dict['word_length'].sort()
     if len(word_dict['word_length']) > 0:
-        average = round((word_dict['word_length'][0] + word_dict['word_length'][-1])/2,2)
+        # average = round((word_dict['word_length'][0] + word_dict['word_length'][-1])/2,2)
+        average = round(statistics.mean(word_dict['word_length']),2)
     else:
         average = 0
 
@@ -252,38 +251,6 @@ def update_word_count(value, word_dict):
                      html.H3("Average Word Length")
                      ], className="tile")
 
-
-@app.callback(
-    Output('length-graph', 'figure'), [Input('intermediate-value', 'value')],
-    [State('intermediate-value', 'value')]
-)
-def update_length(value, word_dict):
-    # Initialize scatter plot list
-    traces = []
-
-    # Add words from word list into Scatter plot dynamically
-    for t in word_dict['word_list']:
-        traces.append(go.Scattergl(
-            x=word_dict['word_length'],
-            y=word_dict['word_frequency'],
-            mode='markers',
-            opacity=0.7,
-            marker={
-                'size': 15,
-                'line': {'width': 1, 'color': 'white'}
-            }
-        ))
-
-    return {
-        'data': traces,
-        'layout': go.Layout(
-            title="Word Diversity",
-            xaxis={'type': 'category', 'title':'Word Length'},
-            yaxis={'type': 'linear', 'title': 'Word Frequency', 'range': [0, int(math.ceil(max(word_dict['word_frequency'])/10.0)) * 10]},
-            showlegend=False,
-            hovermode='closest'
-        )
-    }
 
 @app.callback(
     Output('text', 'value'),
@@ -390,4 +357,4 @@ def update_bar_graph(n_clicks, word_dict):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
