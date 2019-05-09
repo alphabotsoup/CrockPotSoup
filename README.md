@@ -33,17 +33,46 @@ Requires:
 - python 3.6
 - pip
 
-1. Clone CrockPotSoup repository into a directory on your computer. (Mine is in Documents/GitHub)
+1. Install Python
+https://www.python.org/downloads/release/python-364/
+
+    - Click on the version that matches your needs. For Windows make sure you select the right version
+	
+    - Follow the installation instructions
+
+2. Open command line to verify your Python installation
+
+3. Install pip 
+
+    - Download pip from the link below
+    
+        https://bootstrap.pypa.io/get-pip.py
+        
+    - Open command prompt and navigate to the folder containing your get-pip.py script
+    
+    - Run the following command:
+        
+        python get-pip.py
+        
+    - Verify it was installed using the following command
+    
+        pip -V
+        
+4. Clone CrockPotSoup repository into a directory on your computer. (Mine is in Documents/GitHub)
 
     git clone https://github.com/alphabotsoup/CrockPotSoup.git
 
-2. Navigate to CrockPotSoup directory you just cloned
+5. Navigate to CrockPotSoup directory you just cloned
 
-3. Create your virtual environment with the following command:
+6. Install virtualenv
+
+        sudo pip install virtualenv
+        
+7. Create your virtual environment with the following command:
 
     py -3 -m virtualenv venv
 
-4. Your virtual environment is now called "venv". Activate your virtual environment with the
+8. Your virtual environment is now called "venv". Activate your virtual environment with the
 following command:
 
     venv\Scripts\activate
@@ -52,17 +81,9 @@ following command:
     You are now pulling from your install of Python within the venv folder.
     *Note: It is important to activate each time you make changes to ensure you have access to libraries that will be     installed for this project. If you do not do this before running code, you may see errors indicating that you do not have libraries installed that are present in the Lib directory of your virtual environment Python install
 
-5. Install Dash by running the following commands
-    - pip install dash==0.35.1  # The core dash backend
-    - pip install dash-html-components==0.13.4  # HTML components
-    - pip install dash-core-components==0.42.1  # Supercharged components
-    - pip install dash-table==3.1.11  # Interactive DataTable component (new!)
-
-
-6. Install TextBlob library
-    pip install -U textblob
-    python -m textblob.download_corpora
-
+9. Install requirements by running the following command:
+        
+        pip install requirements.txt
 
 ### Mac
 Requires:
@@ -96,12 +117,12 @@ https://www.python.org/downloads/release/python-364/
 
         sudo pip install virtualenv
 
-6. Create your virtual environment with the following command in the root folder of the CrockPotSoup directory:
+7. Create your virtual environment with the following command in the root folder of the CrockPotSoup directory:
 
         python3 -m virtualenv venv
 
 
-7. Your virtual environment is now called "venv". Activate your virtual environment 
+8. Your virtual environment is now called "venv". Activate your virtual environment 
     
         . venv/bin/activate
     
@@ -111,7 +132,7 @@ https://www.python.org/downloads/release/python-364/
 
     
 
-5. Install requirements by running the following command:
+9. Install requirements by running the following command:
         
         pip install requirements.txt
 
