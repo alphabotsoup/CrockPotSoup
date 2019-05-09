@@ -1,0 +1,43 @@
+3/10/19
+
+Agenda:
+1. Go over Sankey diagram
+2. Follow up questions on natural language to functions
+
+Notes:
+How do we handle conversions of words to operators/operands? e.g. Do we put "and" in a database and then pull the value "+"?
+
+So far as I can tell, the only things that need "converting" are verbs, to functions. Nouns will need resolution as well but that will be entirely self-contained (i.e. any "intrinsics" and then anything the user defined).
+
+So we let the speech-tagger decide what the verbs are and then we do lookups on each of those. So the question is, how do lookups work?
+
+Basically:  Verbs to Functions have a many-to-many relationship. Each relationship is a "definition" of the verb. Think how... in English, several words can have the same meaning, and also, one word can have several meanings. Each meaning is a different dictionary definition.
+
+Shaina:
+What if we break apart our language in the following way?
+I was breaking apart sentences based on conjunctions (and, but, by, or).
+The conjunction would resolve to the operator or function
+And = +, By = /, while = loop, if = conditional
+And then the nouns on either side of the conjunction would resolve to an object or variable that would be manipulated based on its type (and maybe other indicators).
+e.g. "I have one orange and two apples. How many pieces of fruit do I have?"
+
+The compiler would look at "and" first which would resolve to conjunction (through NLTK) which would resolve to "sum" or "add." Then it would evaluate objects on either side. "one orange": "one" -> numeral -> 1. "orange" -> noun -> var orange. var orange = 1. "two apples" -> "two", "apples" -> 2 nouns -> var apples = 2;
+But I wasn't considering the initial goals of "one plus two"
+I was jumping straight to the word problem final step
+Which is where our relationships between these words come into play. I think we may have to deal with this by "reverse engineering" the logic. In the end we have either an operator ("+") or we have a function (add (int x, int y)).
+What if we looked at functions like objects (similar to javascript), and our sentences were functions themselves?
+The variables and operators that we parse from the sentence can be broken down into the contents of that function.
+Does that make sense?
+
+Logan:
+I have one orange and two apples. How many pieces of fruit do I have?
+I am the subject, and have is the verb. I think this will also be an intrinsic, because it has to do with assignment (one of the few verbs that isn't exactly a function). We're assigning something to I's possession.
+Looking ahead, we see and which I insofar interpret as a comma. Gives you two expressions, one on each side.
+On the left side you have one orange and on the right side you have two apples. orange and apples are nouns. They don't necessarily have any meaning yet. A later statement might give them more meaning. But at the very least, they're nouns which have come into existence.
+I'm not exactly sure what one and two would be tagged as in this case.
+
+
+To Do:
+-Create Sankey Diagram
+
+-https://www.nltk.org/book/ch05.html

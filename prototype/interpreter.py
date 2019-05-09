@@ -137,7 +137,6 @@ VERBS = {
 }
 
 
-
 ### Dash I/O
 # Compile input
 @app.callback(
