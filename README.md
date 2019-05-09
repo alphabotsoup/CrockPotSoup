@@ -5,7 +5,7 @@ on word statistics.
 
 ## Requirements
 ### Python 3.6 
-Other Python 3.x versions may work. I haven't tried them out
+
 
 ### virtualenv
 The purpose of this is to isolate Python environments,
@@ -70,21 +70,40 @@ Requires:
 - pip
 - python 3.6
 
-1. Clone CrockPotSoup repository into a directory on your computer. (Mine is in Documents/GitHub)
+1. Install Python
+https://www.python.org/downloads/release/python-364/
+
+    - Click on the version that matches your needs. For Mac, click Mac OS X
+	
+    - Follow the installation instructions
+
+2. Open your terminal to verify your Python installation
+
+        Shainas-Air:~ python --version
+        Python 3.6.4
+
+3. Install pip 
+
+        sudo easy_install pip
+
+4. Clone CrockPotSoup repository into a directory on your computer. (Mine is in Documents/GitHub)
 
     git clone https://github.com/alphabotsoup/CrockPotSoup.git
 
-2. Navigate to CrockPotSoup directory you just cloned
+5. Navigate to CrockPotSoup directory you just cloned
+
+6. Install virtualenv
+
+        sudo pip install virtualenv
+
+6. Create your virtual environment with the following command in the root folder of the CrockPotSoup directory:
+
+        python3 -m virtualenv venv
 
 
-3. Create your virtual environment with the following command:
-
-    python3 -m virtualenv venv
-
-
-4. Your virtual environment is now called "venv". Activate your virtual environment 
+7. Your virtual environment is now called "venv". Activate your virtual environment 
     
-    . venv/bin/activate
+        . venv/bin/activate
     
     You will see now that your virtual environment has been activate as denoted by (venv). 
     You are now pulling from your install of Python within the venv folder.
@@ -92,21 +111,9 @@ Requires:
 
     
 
-5. Install Dash by running the following commands
-    - pip install dash==0.35.1  # The core dash backend
-    - pip install dash-html-components==0.13.4  # HTML components
-    - pip install dash-core-components==0.42.1  # Supercharged components
-    - pip install dash-table==3.1.11  # Interactive DataTable component (new!)
+5. Install requirements by running the following command:
+        
+        pip install requirements.txt
 
-
-6. Install TextBlob library
-    pip install -U textblob
-    python -m textblob.download_corpora
-    
-    * I had a certificate issue on Mac. I'm not sure what you'll find on Windows. I ran the following
-    commands to resolve it
-    
-    . /Applications/Python\ 3.6/Install\ Certificates.command 
-    python -m textblob.download_corpora
 
      
