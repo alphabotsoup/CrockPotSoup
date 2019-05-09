@@ -61,6 +61,10 @@ https://www.python.org/downloads/release/python-364/
 4. Clone CrockPotSoup repository into a directory on your computer. (Mine is in Documents/GitHub)
 
     git clone https://github.com/alphabotsoup/CrockPotSoup.git
+    
+    - Alternatively you can download a zip file on your computer by clicking the Clone or download button and selecting
+    the Download zip file option
+    - Double click to unzip your file and follow the remaining steps below
 
 5. Navigate to CrockPotSoup directory you just cloned
 
@@ -110,6 +114,10 @@ https://www.python.org/downloads/release/python-364/
 4. Clone CrockPotSoup repository into a directory on your computer. (Mine is in Documents/GitHub)
 
     git clone https://github.com/alphabotsoup/CrockPotSoup.git
+    
+    - Alternatively you can download a zip file on your computer by clicking the Clone or download button and selecting
+    the Download zip file option
+    - Double click to unzip your file and follow the remaining steps below
 
 5. Navigate to CrockPotSoup directory you just cloned
 
