@@ -4,7 +4,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Output,Input,State
 # Back-end imports
-import fileinput
 from pattern.en import parse, pprint, parsetree, Chunk, number
 from pattern.search import search
 
@@ -19,9 +18,9 @@ app.layout([
         html.Button('Compile', id='submit')
     ]),
     # Compilation options
-    html.Div((id="compile"),
+    html.Div([],id="compile"),
     # Output
-    html.Div([id="output")
+    html.Div([],id="out")
 ])
 
 
@@ -46,57 +45,68 @@ def add(*args):
         if isinstance(arg, list):
             # If an argument is a list of numbers, unpack and make recursive call
             n += add(*arg)
+        elif not isinstance(arg, numbers.Number):
+            continue
         else:
             n += arg
     return n
-def sub():
+def sub(*args):
     n = args[0]
     for arg in args[1:]:
         if isinstance(arg, list):
             # If an argument is a list of numbers, unpack and make recursive call
             n -= sub(*arg)
+        elif not isinstance(arg, numbers.Number):
+            continue
         else:
             n -= arg
     return n
-def mul():
+def mul(*args):
     n = args[0]
     for arg in args[1:]:
         if isinstance(arg, list):
             # If an argument is a list of numbers, unpack and make recursive call
             n *= mul(*arg)
+        elif not isinstance(arg, numbers.Number):
+            continue
         else:
             n *= arg
     return n
-def div():
+def div(*args):
     n = args[0]
     for arg in args[1:]:
         if isinstance(arg, list):
             # If an argument is a list of numbers, unpack and make recursive call
             n /= div(*arg)
+        elif not isinstance(arg, numbers.Number):
+            continue
         else:
             n /= arg
     return n
-def mod():
+def mod(*args):
     n = args[0]
     for arg in args[1:]:
         if isinstance(arg, list):
             # If an argument is a list of numbers, unpack and make recursive call
             n %= mod(*arg)
+        elif not isinstance(arg, numbers.Number):
+            continue
         else:
             n %= arg
     return n
-def inc(num):
-    return num+1
-def dec(num):
-    return num-1
+# Placeholder "arg": positional arguments go subj,obj; only obj used here
+def inc(arg, num, *args):
+    return num+1 if isinstance(num, numbers.Number) else 0
+def dec(arg, num, *args):
+    return num-1 if isinstance(num, numbers.Number) else 0
 
 # Assignment
 OBJECTS = {}    # Runtime table of declared objects
 
-def exist(obj,val):
-    OBJECTS[obj] = val
-def has(obj,*args):
-    OBJECTS[obj] = args
+def exist(var,val,*args):
+    OBJECTS[var] = val
+def has(var,*args):
+    OBJECTS[var] = args
 
 # Verb->Function lookup table
 VERBS = {
@@ -126,23 +136,6 @@ VERBS = {
     "has": [has,exist]
 }
 
-
-### Front-end routines
-# Serve initial input form
-
-
-# Query user for compilation
-def query_user():
-    pass
-
-# Output
-
-
-
-
-
-#print(pseudocode)
-#print(OBJECTS)  # Dump objects created from this input
 
 
 ### Dash I/O
@@ -192,14 +185,14 @@ def compile_input(n_clicks, text_input):
             html_form.extend([
                 html.H3(subj + " " + verb + " " + obj),
                 dcc.Dropdown(options=opts, placeholder="Select interpretation"),
-                dcc.Checklist(options=[{'label': 'Also pass context?', 'value'='con_var'}])
+                dcc.Checklist(options=[{'label': 'Also pass context?', 'value':'con_var'}])
             ])
     html_form.append(html.Button('Process', id='process'))
     return html_form
 
 # Output
 @app.callback(
-    Output('output', 'children'),
+    Output('out', 'children'),
     [Input('process', 'n_clicks')],
     [State('input', 'value'), State('compile', 'children')]
 )
@@ -227,14 +220,28 @@ def output(n_clicks, text_input, options):
             obj = verb.object or verb.next(type='NP')
 
             # Compute function call
-            args = []
-            if subj: args.append(subj)
-            o+=1    # Get interpretation dropdown
-            if options[o].value >= 0
-                VERBS[verb.head.lemma][options[o].value](
             o+=1    # Get context var checkbox
+            if options[o].value == 'con_var':
+                con_var = context_vars['var']
+            else:
+                con_var = None
+            o+=1    # Get interpretation dropdown
+            if options[o].value >= 0:
+                func = VERBS[verb.head.lemma][options[o].value]
+                if func.__name__ == 'is' or func.__name__ == 'has':
+                    context_vars['var'] = func(subj.head, con_var or number(obj.head) or obj.head)
+                else:
+                    context_vars['var'] = func(number(subj.head),number(obj.head),con_var)
+            else:
+                context_vars['var'] = number(obj.head)
 
             # Generate output
+            html_out.append(html.H4(subj + " " + verb + " " + obj + " -- " + context_vars['var']))
+    html_out.append(html.H5("Object definitions:"))
+    for var,val in OBJECTS.items():
+        html_out.append(html.H6(var + ": " + str(val)))
+    return html_out
 
 
-
+if __name__ == '__main__':
+    app.run(debug=True)
