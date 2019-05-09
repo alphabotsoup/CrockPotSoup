@@ -1,3 +1,6 @@
+import nltk
+from nltk import *
+from nltk.tree import *
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -218,7 +221,6 @@ def update_word_count(value, word_dict):
     return html.Div([html.H1(total),
                      html.H3("Word Total")
                      ], className="tile")
-
 
 @app.callback(
     Output('unique-words', 'children'), [Input('intermediate-value', 'value')],
