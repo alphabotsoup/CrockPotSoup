@@ -41,7 +41,7 @@ more-itertools==7.0.0
 mysqlclient==1.4.2.post1
 nbformat==4.4.0
 nltk==3.4
-numpy==1.16.2
+numpy==1.22.0
 pandas==0.24.1
 Pattern==3.6
 parso==0.3.4
